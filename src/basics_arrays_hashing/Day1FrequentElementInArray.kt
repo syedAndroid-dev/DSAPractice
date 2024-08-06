@@ -1,8 +1,6 @@
 package basics_arrays_hashing
 
 import java.util.*
-import kotlin.collections.ArrayList
-import kotlin.collections.HashMap
 
 
 fun findFrequentElement(arr : List<Int>,k : Int):List<Int>{
@@ -15,7 +13,7 @@ fun findFrequentElement(arr : List<Int>,k : Int):List<Int>{
         }
     }
 
-    for (i in 0..<arr.size){
+    for (i in arr.indices){
         frequencyMap[arr[i]] = frequencyMap.getOrDefault(arr[i],0)+1
     }
 
@@ -24,59 +22,33 @@ fun findFrequentElement(arr : List<Int>,k : Int):List<Int>{
     }
 
     val result = priorityFrequency.map { it.key }
-    return result.take(k);
+    return result.take(k)
 }
 
 
-fun findFrequentElementInArray(arr : List<Int>,k : Int): List<Int>{
+fun findFrequentElementInArray(arr : List<Int>,k : Int): IntArray{
     val mp = HashMap<Int, Int>()
+    val heap = PriorityQueue<Int> { n1, n2 -> mp[n1]!! - mp[n2]!! }
+    val top = IntArray(k)
     val n = arr.size
+
     for (i in 0..<n) {
         mp[arr[i]] = mp.getOrDefault(arr[i], 0) + 1
     }
 
-    val queue = PriorityQueue<Map.Entry<Int, Int>> { a, b ->
-        if (a.value == b.value) {
-            b.key.compareTo(a.key)
-        } else {
-            b.value.compareTo(a.value)
-        }
+    for (entry in mp.keys) {
+        heap.add(entry)
+        if (heap.size > k)
+            heap.poll()
     }
 
-    // Insert the data from the map to the Priority Queue.
-    for (entry in mp.entries) {
-        queue.offer(entry)
+    for (i in k - 1 downTo 0) {
+        top[i] = heap.poll()
     }
-
-    val m = queue.map { it.key }
-    return m.take(k)
-}
-
-fun findFrequentElementBucketSort(arr: List<Int>, k: Int): java.util.ArrayList<Int>{
-    val mp =  HashMap<Int,Int>()
-    val frequency : Array<ArrayList<Int>> = Array(size = arr.size+1){ arrayListOf() }
-    val result : ArrayList<Int> = arrayListOf()
-
-    for(i in arr){
-        mp[i] = mp.getOrDefault(mp[i],0)+1
-    }
-
-    for((key,value) in mp){
-        frequency[value].add(key)
-    }
-
-    for(i in frequency.size-1 downTo 0){
-        for (j in frequency[i]){
-            result.add(j)
-            if (result.size == k)
-                return result
-        }
-    }
-
-    return result
+    return top
 }
 
 fun main(){
     val arr = listOf(3, 1, 4, 4, 5, 2, 6, 1,5,5,5)
-    println(findFrequentElement(arr = arr,k = 2))
+    println(findFrequentElementInArray(arr = arr,k = 2))
 }

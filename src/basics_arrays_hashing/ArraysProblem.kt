@@ -4,6 +4,7 @@ import java.util.PriorityQueue
 
 
 fun problem1Array():Boolean{
+
     val nums = intArrayOf(1,2,3,4,1)
     nums.sort()
 
@@ -13,6 +14,14 @@ fun problem1Array():Boolean{
         }
     }
     return false
+}
+
+fun containsDuplicate2(arr : IntArray):Boolean{
+    val hMap = mutableMapOf<Int,Int>()
+    for (i in arr){
+        hMap[i] = hMap.getOrDefault(i,0)+1
+    }
+    return hMap.any { it.value > 1 }
 }
 
 fun hashMapExample(){
@@ -47,6 +56,17 @@ fun findValidAnagram(s:String,t:String):Boolean{
     }
     return true
 }
+
+fun findValidAnagram2(s: String,t: String):Boolean{
+    val hMap : MutableMap<Char,Int> = hashMapOf()
+
+    for (i in s.indices){
+        hMap[s[i]] = hMap.getOrDefault(s[i],0) + 1
+        hMap[t[i]] = hMap.getOrDefault(t[i],0) - 1
+    }
+    return !hMap.containsValue(1)
+}
+
 
 fun findFrequentElement(numbers : IntArray,frequentElement : Int):IntArray{
     val frequentMap : HashMap<Int,Int> = hashMapOf()
