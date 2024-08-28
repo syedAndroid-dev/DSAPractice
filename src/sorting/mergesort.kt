@@ -27,8 +27,8 @@ fun merge(arr: MutableList<Int>, left: Int, mid: Int, right: Int) {
     }
 
     var index = left    //left index because
-    var p1 = 0
-    var p2 = 0
+    var p1 = 0  //Left Start
+    var p2 = 0  //Right Start
 
     while (p1<leftHalf.size && p2<rightHalf.size){
         if (leftHalf[p1] <= rightHalf[p2]){
